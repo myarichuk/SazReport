@@ -83,7 +83,8 @@ namespace SazReport
                                    .ImportTranscoders(Assembly.GetExecutingAssembly().Location))
             {
                 Console.WriteLine("This assembly was not compiled with a SAZ-exporter, cannot continue.");
-                Console.WriteLine("It is definitely not supposed to happen, something is very wrong");
+                Console.WriteLine("Before all else, please verify that the project was compiled with SAZ_SUPPORT conditional symbol.");
+                Console.WriteLine("This is a prerequisite for a fiddler library to support handling SAZ session archives");
                 return;
             }
 
