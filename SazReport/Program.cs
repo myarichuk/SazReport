@@ -113,14 +113,7 @@ namespace SazReport
 
             var report = new SazReport();
 
-            var requestTimings = sessions.Select(x => x.Timers.ClientDoneResponse - x.Timers.ClientConnected)
-                                         .ToList();
-
-            report.RequestLatencyStats.Max = requestTimings.Max();
-            report.RequestLatencyStats.Min = requestTimings.Min();
-            report.RequestLatencyStats.Average = TimeSpan.FromMilliseconds(requestTimings.Average(x => x.TotalMilliseconds));
-
-            var requestResponseInformation = from session in sessions
+            var requestResponseInformation = (from session in sessions
                                              let timing = session.Timers.ClientDoneResponse -
                                                           session.Timers.ClientConnected
                                              select new RequestResponseInfo
@@ -135,14 +128,20 @@ namespace SazReport
                                                  RequestLength = session.RequestBody.Length,
                                                  ResponseLength = session.ResponseBody.Length,
                                                  ResponseCode = session.responseCode
-                                             };
+                                             }).ToList();
+            
+            report.RequestLatencyStats.Max = requestResponseInformation.Max(x => x.RequestLatency);
+            report.RequestLatencyStats.Min = requestResponseInformation.Min(x => x.RequestLatency);
+            report.RequestLatencyStats.Average = TimeSpan.FromMilliseconds(requestResponseInformation.Average(x => x.RequestLatency.TotalMilliseconds));
+
+
 
             report.LongestRequests = requestResponseInformation.OrderByDescending(x => x.RequestLatency)
                                                                .Take(TopItemCount).ToList();
 
-            report.RequestSizeStats.Max = sessions.Max(x => x.RequestBody.Length);
-            report.RequestSizeStats.Min = sessions.Min(x => x.RequestBody.Length);
-            report.RequestSizeStats.Average = sessions.Average(x => x.RequestBody.Length);
+            report.RequestSizeStats.Max = requestResponseInformation.Max(x => x.RequestLength);
+            report.RequestSizeStats.Min = requestResponseInformation.Min(x => x.RequestLength);
+            report.RequestSizeStats.Average = requestResponseInformation.Average(x => x.RequestLength);
 
             report.LargestRequests = requestResponseInformation.OrderByDescending(x => x.RequestLength)
                                                                .Take(TopItemCount).ToList();

@@ -49,6 +49,10 @@
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="metrics, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ca6c6ef570198eba, processorArchitecture=MSIL">
+      <HintPath>..\packages\Metrics.1.0.13\lib\net451\metrics.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="ServiceStack.Text, Version=4.0.50.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Text.4.0.50\lib\net40\ServiceStack.Text.dll</HintPath>
       <Private>True</Private>
